@@ -1,0 +1,50 @@
+
+###CARGA DE LIBRERIAS O PAQUETES REQUERIDOS##
+library(lattice)
+library(aqp)
+library(raster)
+library(rgdal)
+library(gtools)
+library(sp)
+library(rgeos)
+
+## DEFINIR DIRECTORIO DE TRABAJO
+setwd("C:/Users/usuario/Desktop/capas_rr")
+list.files("C:/Users/usuario/Desktop/capas_rr")
+
+
+###unir las dos bases de datos por codigo y poner x-y
+dat1<-read.table("HORIZONTES.csv", sep=";", header = T)
+dat1
+dat2<-read.table("PERFILES.csv", sep=";", header= T)
+dat2
+dat<-merge(dat2,dat1,by="ID_Nac",all=FALSE)
+
+datasp=dat
+datasp
+
+############ si hago esta parte no puedo unir los datos a la tabla data
+coordinates(datasp)=~X+Y
+head(datasp)
+
+proj4string(datasp)<-crs("+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs")
+plot(datasp)
+#######
+
+###covariables
+
+setwd("C:/Users/usuario/Desktop/CAPAS_MAGAP/USO SUELO SIERRA")
+a<-list.files("C:/Users/usuario/Desktop/capas_rr")
+a
+
+uso<- shapefile(a[7])
+#####geo<-shapefile(a[7])
+bio<-stack(a[10:28])
+###gmorp<-stack(a[1:26])
+
+##extraer los datos de las covariables a los puntos 
+
+data<-data.frame(datasp, data.frame(extract((uso),datasp[c("X","Y")])))
+
+###me sale todo lso campos NA y borra lo que ya agregue arriba de uso 
+data<-data.frame(datasp, data.frame(extract(stack(bio),datasp[c("X","Y")])
