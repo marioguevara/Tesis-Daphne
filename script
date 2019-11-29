@@ -48,3 +48,8 @@ data<-data.frame(datasp, data.frame(extract((uso),datasp[c("X","Y")])))
 
 ###me sale todo lso campos NA y borra lo que ya agregue arriba de uso 
 data<-data.frame(datasp, data.frame(extract(stack(bio),datasp[c("X","Y")])
+
+##ejemplo list files 
+
+lis <-list.files('/home/mguevara/Downloads/soil-moisture/', full.names = TRUE)
+s <- stack(lis[20], bands=15)
