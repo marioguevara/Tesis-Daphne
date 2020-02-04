@@ -1,0 +1,35 @@
+#1) Instalación de paquetes 
+#install.packages('aqp')
+
+#2) Carga de librerias
+library(lattice)
+library(aqp)
+
+#3) Definición de directorio y archivos de trabajo
+setwd("C:/Users/usuario/Desktop/capas_rr")
+
+dat1=read.table("HORIZONTES.csv", sep=';', header=T) # Definición de archivos de trabajo
+dat2=read.table("PERFILES.csv", sep=';', header=T) # Definición de archivos de trabajo
+
+
+#4) Creación de BD para trabajo en R, se asocian los horizontes a sus perfiles
+dat <- merge(dat1,dat2,by='ID_Nac',all=FALSE)
+data=dat
+str(dat)
+
+
+#6) Determinación de limites de horizontes
+depths(dat) <- ID_Nac ~ Lim_sup + Lim_inf
+idname(dat) # self-explanatory # Nombre de idname
+horizonDepths(dat) # self-explanatory
+depth_units(dat) # defaults to 'cm'
+metadata(dat) # not much to start with
+#profile_id(dat) # vector of profile IDs
+horizonNames(dat) # column names from horizon data
+siteNames(dat) 
+length(dat) # number of profiles in the collection
+nrow(dat) # number of horizons in the collection
+names(dat) # column names from site and horizon data, concatenated into a single vector
+min(dat) # shallowest profile depth in collection
+max(dat) # deepest profile depth in collection
+#site(dat)  # get or set site data
