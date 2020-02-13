@@ -1,0 +1,29 @@
+###CARGA DE LIBRERIAS O PAQUETES REQUERIDOS##
+library(lattice)
+library(aqp)
+library(raster)
+library(rgdal)
+library(gtools)
+library(sp)
+library(rgeos)
+
+## DEFINIR DIRECTORIO DE TRABAJO
+setwd("C:/Users/usuario/Desktop/capas_rr")
+list.files("C:/Users/usuario/Desktop/capas_rr")
+
+####definir el tile 
+library(GSIF)
+e<- extent(raster("aspect_ecu.tif"))
+plot(e)
+raster(e)-> r
+r
+###añadir la proyeccion
+crs(r)<-"+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+rasterToPoints(r)
+###covariables uso de suelo en shape 
+uso<- shapefile("USO_SUELO_SIERRA.shp")
+saveRDS(uso, "uso.rds")
+uso
+# Extraer info de covariables a los puntos
+ruso <- overlay(r, uso.rds) ####me da este error 2Error in (function (classes, fdef, mtable)  : 
+  unable to find an inherited method for function ‘overlay’ for signature ‘"RasterLayer", "SpatialPolygonsDataFrame"
