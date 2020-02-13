@@ -18,12 +18,21 @@ plot(e)
 raster(e)-> r
 r
 ###añadir la proyeccion
-crs(r)<-"+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+crs(r)<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
 rasterToPoints(r)
 ###covariables uso de suelo en shape 
 uso<- shapefile("USO_SUELO_SIERRA.shp")
+crs(uso)<-"+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 "
 saveRDS(uso, "uso.rds")
-uso
-# Extraer info de covariables a los puntos
-ruso <- overlay(r, uso.rds) ####me da este error 2Error in (function (classes, fdef, mtable)  : 
-  unable to find an inherited method for function ‘overlay’ for signature ‘"RasterLayer", "SpatialPolygonsDataFrame"
+
+#covariables raster
+amb1<-raster("wc2.0_bio_30s_01.tif")
+amb1
+
+# Extraer info de  shape a los puntos
+ruso <- overlay(r, uso.rds)
+
+##extraer info de raster a los puntos
+ramb1<-extract(r,amb1)
+#### en los dos ultimos me sale Error in (function (classes, fdef, mtable)  : 
+  unable to find an inherited method for function ‘overlay’ for signature ‘"RasterLayer", "SpatialPolygonsDataFrame"’
