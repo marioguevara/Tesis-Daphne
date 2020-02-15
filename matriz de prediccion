@@ -13,6 +13,38 @@ list.files("C:/Users/usuario/Desktop/capas_rr")
 
 ####definir el tile 
 library(GSIF)
+
+#TIENES QUE IMPORTAR TODAS LAS CAPAS DE UN MISMO 'TILE'
+
+ASPECT_TILE_X <- raster("aspect_ecu.tif")
+SLOPE_TILE_X <- raster("slope_ecu.tif")
+
+###... importas todos los atributos topograficos de un solo tile
+### luego los haces stack
+
+STACK <- stack(ASPECT_TILE_X , SLOPE_TILE_X)
+
+#luego haces raster to points
+pts <- rasterToPoints(STACK, spatial = TRUE)
+
+#luego importas tu covariable X
+amb1<-raster("wc2.0_bio_30s_01.tif")
+
+# y extraes (reproyectas si no tienen la misma proyeccion)
+pts@data <- data.frame(pts@data, pts@coords, data.frame(extract(amb1, pts)))
+names(pts)
+#si es categorica la covariable (importas) 
+
+uso<- shapefile("USO_SUELO_SIERRA.shp")
+
+# y usas overlay (siempre y cuando tengan la misma proyeccion)
+
+pts@data <- data.frame(pts@data, pts@coords, data.frame(overlay(pts, uso)))
+
+names(pts)
+
+###me avisas si hay algun problema
+
 e<- extent(raster("aspect_ecu.tif"))
 plot(e)
 raster(e)-> r
